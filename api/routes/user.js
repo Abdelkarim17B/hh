@@ -31,7 +31,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json("User has been deleted...");
@@ -41,7 +41,7 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //GET USER
-router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
+router.get("/find/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, ...others } = user._doc;
@@ -52,7 +52,7 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //GET ALL USER
-router.get("/", verifyTokenAndAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   const query = req.query.new;
   try {
     const users = query
@@ -88,6 +88,24 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
     res.status(200).json(data)
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  try {
+      if (!req.body.email || !req.body.username || !req.body.password) {
+          res.status(400).json({ message: "Missing attributes" });
+      } else {
+              const createdUser = await   User.create(req.body);
+              if (createdUser) {
+                  res.status(200).json({ message: "User created successfully" });
+              } else {
+                  res.status(400).json({ message: "User creation failed" });
+              }
+          
+      }
+  } catch (err) {
+      res.status(500).json({ message: err.message });
   }
 });
 
