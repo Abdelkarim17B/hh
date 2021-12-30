@@ -1,7 +1,7 @@
 import Product from "./pages/Product";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
-import Register from "./pages/Register";
+import Register from "./pages/Home1";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import {
@@ -35,7 +35,7 @@ const App = () => {
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
-          {user ? <Redirect to="/" /> : <Register />}
+          <Register></Register>
         </Route>
       </Switch>
     </Router>
